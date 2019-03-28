@@ -1,5 +1,5 @@
 #include "Point.hh"
-
+#include <iostream>
 #include <cmath>
 using namespace std;
 
@@ -54,10 +54,41 @@ double Point::slope(const Point& p) const {
     return (p.get_y() - y) / (p.get_x() - x);
 }
 
-bool Point::leftof(const Point& p2, const Point& p3) const {
-    return (p3.get_x() - p2.get_x()) * (y - p2.get_y()) >=
-           (p3.get_y() - p2.get_y()) * (y - p2.get_x());
+bool Point::leftof(const Point& p1, const Point& p2) const {
+    double val = (p2.get_x() - p1.get_x()) * (y - p1.get_y()) -
+                 (p2.get_y() - p1.get_y()) * (x - p1.get_x());
+    return val >= 0 or abs(val) < epsilon;
 }
+
+bool Point::rightof(const Point& p1, const Point& p2) const {
+    double val = (p2.get_x() - p1.get_x()) * (y - p1.get_y()) -
+                 (p2.get_y() - p1.get_y()) * (x - p1.get_x());
+    return val <= 0 or abs(val) < epsilon;
+}
+
+/*bool Point::inside_triangle(const vector<Point>& points, int i, int j) const {
+    for(int k = i; k < j; ++k) {
+        if(leftof(points[k], points[k + 1])) return false;
+    }
+    return true;
+}
+
+bool Point::recursive_inside(const vector<Point>& points, int i, int j) const {
+    if(i - j <= 2) return inside_triangle(points, i, j);
+    int m = (i + j) / 2 + 1;
+    return recursive_inside(points, i, m) or recursive_inside(points, m, j) or inside_triangle({points[i], points[m], points[j]}, 0, 2);
+}
+
+bool Point::is_inside(const vector<Point>& points) const {
+    if(points.size() == 0) return false;
+    if(points.size() == 1) return *this == points[0];
+    if(points.size() == 2) {
+        double lamda1 = (get_x() - points[0].get_x()) / (points[1].get_x() - points[0].get_x());
+        double lamda2 = (get_y() - points[0].get_y()) / (points[1].get_y() - points[0].get_y());
+        return lamda1 == lamda2 and lamda1 >= 0 and lamda1 <= 1;
+    }
+    return recursive_inside(points, 0, points.size() - 1);
+}*/
 
 /** Compares this point to point p. */
 bool Point::operator== (const Point& p) const {

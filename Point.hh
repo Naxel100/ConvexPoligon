@@ -1,6 +1,10 @@
 #ifndef Point_hh
 #define Point_hh
 
+const double epsilon = 1e-12;
+
+#include <vector>
+using namespace std;
 
 /** The Point class stores a two dimensional point in the plane
     and provides some usefull operations for it.
@@ -32,6 +36,8 @@ public:
     double slope(const Point& p) const;
 
     bool leftof(const Point& p2, const Point& p3) const;
+
+    bool rightof(const Point& p2, const Point& p3) const;
 
     /** Compares this point to point p. */
     bool operator== (const Point& p) const;
