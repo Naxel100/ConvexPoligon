@@ -104,49 +104,48 @@ If any command contains or produces an error, the error will print a line starti
 
 ## The Polygon calculator
 
-The Polygon calculator must read commands from the standard input and write
-their answers to the standard output. In some cases, it also should use some
-files.
+The Polygon calculator must read commands from the standard input and write their answers to the standard output. In some cases, it also should use some files.
 
-Given that the content of `file2.txt` is
-
-```bash
-p2 1 1 0.5 0.1 0 0 1 0
-p3 0.1 0.1
-```
-
-the execution of the script using the calculator on the left should produce the output on the right:
+The execution of the script using the calculator on the left should produce the output on the right:
 
 <table>
 <tr>
 <td>
 
 ```
-# sample script for the polygon calculator
-polygon p1 0 0  0 1  1 1
-print p1
-area p1
-perimeter p1
-vertices p1
-centroid p1
-save file1.txt p1
-load file2.txt
-list
-print p1
-print p2
-print p3
-union p3 p1 p2
-print p3
-inside p1 p3
+# Joc de proves
+
+polygon p1 0 0 1 1 1 0 0 1
+polygon p2 0.5 0.5 1 2 1 0.5
+intersection p3 p2 p1
+inside p3 p2
+inside p2 p3
+inside p3 p1
+area p2
+vertices p2
+edges p1
+save file.txt p1 p2
+polygon p4 -1 1 1 -1
+union p2 p4
+intersection p5 p4 p1
+bbox p6 p1 p2 p3 p4 p5
+print p6
+color p1
 setcol p1 1 0 0
+color p1
 setcol p2 0 1 0
 setcol p3 0 0 1
-draw image.png p1 p2 p3
-bbox p4 p1 p2
-print p4
-# some errors
-foobar
-print p5
+setcol p4 1 0.64 0
+setcol p5 100 100 100
+draw image.png p1 p2 p3 p4 p5 p6
+load file.txt
+draw image2.png p1 p2 p3 p4 p5
+polygon p1 -1 1 -1 -1 1 1 1 -1
+centroid p1
+polygon p2 0 3 5 5 9 2 9 5 2 0 4 2 9 2 8 4 2 0 4 0 34 4 3 39 2 3 2 5 9 2 12 3 5 3 2 1
+print p2
+polygon p10
+draw image3.png p2 p1
 ```
 
 </td>
@@ -154,30 +153,39 @@ print p5
 
 ```
 #
-ok
-p1 0.000 0.000 0.000 1.000 1.000 1.000
-0.500
-3.414
-3
-0.333 0.667
+
 ok
 ok
-p1 p2 p3
-p1 0.000 0.000 0.000 1.000 1.000 1.000
-p2 0.000 0.000 1.000 1.000 1.000 0.000
-p3 0.100 0.100
 ok
-p3 0.000 0.000 0.000 1.000 1.000 1.000 1.000 0.000
 yes
+no
+yes
+0.375
+3
+4
 ok
 ok
 ok
 ok
 ok
-p4 0.000 0.000 0.000 1.000 1.000 1.000 1.000 0.000
-#
-error: unrecognized command
-error: undefined identifier
+p6 -1.000 -1.000   -1.000 2.000   1.000 2.000   1.000 -1.000
+red: 0.000  green: 0.000  blue: 0.000
+ok
+red: 1.000  green: 0.000  blue: 0.000
+ok
+ok
+ok
+error: all entries must be between 0 and 1, included.
+ok
+ok
+ok
+ok
+0.000 0.000
+ok
+p2 0.000 3.000   3.000 39.000   34.000 4.000   4.000 0.000   2.000 0.000
+ok
+ok
+
 ```
 
 </td>
@@ -187,9 +195,11 @@ error: undefined identifier
 Moreover, the content of `file1.txt` will be
 
 ```
-p1 0.000 0.000 0.000 1.000 1.000 1.000
+p1  0 0  0 1  1 1  1 0
+p2  0.5 0.5  1 2  1 0.5
 ```
 
-and `image.png` will be
+and the images will be:
 
-![image.png](image.png)
+
+
