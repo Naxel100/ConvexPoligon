@@ -192,7 +192,7 @@ ok
 </tr>
 </table>
 
-Moreover, the content of `file1.txt` will be
+Moreover, the content of `file.txt` will be
 
 ```
 p1  0 0  0 1  1 1  1 0
@@ -201,5 +201,17 @@ p2  0.5 0.5  1 2  1 0.5
 
 and the images will be:
 
+#### image.png
 
+![image.png](image.png)
+
+
+#### image2.png
+
+![image2.png](image2.png)
+
+
+#### image3.png
+
+![image3.png](image3.png)
 
