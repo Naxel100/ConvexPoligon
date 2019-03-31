@@ -26,12 +26,15 @@ void bbox(istringstream& iss) {
     iss >> name;
     ConvexPolygon result;
     while(iss >> polygon) {
-        if(inexistent(polygon)) cout << "warning: the given polygon " << polygon << " doesn't exist." << endl;
-        else result = result + map_polygons[polygon];
+        if(inexistent(polygon)) {
+            cout << "error: the given polygon " << polygon << " doesn't exist." << endl;
+            return;
+        }
+        result = result + map_polygons[polygon];
     }
     if(name.empty()) cout << "error: a polygon name is expected." << endl;
     else {
-        map_polygons.insert({name, result.bbox()});
+        map_polygons[name] = result.bbox();
         cout << "ok" << endl;
     }
 }
@@ -58,12 +61,15 @@ void define_polygon(istringstream& iss) {
     vector<Point> points;
     while(iss >> x_coord) {
         if(iss >> y_coord) points.push_back(Point(x_coord, y_coord));
-        else cout << "One value is missing, the last number won't be saved." << endl;
+        else {
+            cout << "error: one value is missing." << endl;
+            return;
+        }
     }
     if(name.empty()) cout << "error: a polygon name is expected." << endl;
     else {
         cout << "ok" << endl;
-        map_polygons.insert({name, ConvexPolygon(points)});
+        map_polygons[name] = ConvexPolygon(points);
     }
 }
 
@@ -74,11 +80,13 @@ void draw(istringstream& iss) {
     vector<ConvexPolygon> polygons;
     ConvexPolygon great_polygon;
     while(iss >> polygon) {
-        if(inexistent(polygon)) cout << "warning: the given polygon " << polygon << " doesn't exist." << endl;
-        else {
-            polygons.push_back(map_polygons[polygon]);
-            great_polygon = great_polygon + map_polygons[polygon];
+        if(inexistent(polygon)) {
+            cout << "error: the given polygon " << polygon << " doesn't exist." << endl;
+            return;
         }
+        polygons.push_back(map_polygons[polygon]);
+        great_polygon = great_polygon + map_polygons[polygon];
+
     }
     if(file_name.empty()) cout << "error: a file name is expected." << endl;
     else{
@@ -109,7 +117,10 @@ void intersection(istringstream& iss) {
     vector<string> polygons;
     bool first = true;
     while(iss >> polygon) {
-        if(not first and inexistent(polygon)) cout << "warning: the given polygon " << polygon << " doesn't exist." << endl;
+        if(not first and inexistent(polygon)) {
+            cout << "error: the given polygon " << polygon << " doesn't exist." << endl;
+            return;
+        }
         else polygons.push_back(polygon);
         first = false;
     }
@@ -117,10 +128,10 @@ void intersection(istringstream& iss) {
         cout << "error: incorrect number of given polygons." << endl;
         return;
     }
-    else if(polygons.size() == 3) map_polygons.insert({polygons[0], map_polygons[polygons[1]] * map_polygons[polygons[2]]});
+    else if(polygons.size() == 3) map_polygons[polygons[0]] = map_polygons[polygons[1]] * map_polygons[polygons[2]];
     else {
         if(inexistent(polygons[0])) {
-            cout << "error: incorrect number of given polygons." << endl;
+            cout << "error: the given polygon " << polygons[0] << " doesn't exist." << endl;
             return;
         }
         map_polygons[polygons[0]] = map_polygons[polygons[0]] * map_polygons[polygons[1]];
@@ -150,11 +161,14 @@ void load(istringstream& iss) {
         iss_file >> name;
         double x_coord, y_coord;
         vector<Point> points;
-        while(iss >> x_coord) {
-            if(iss >> y_coord) points.push_back(Point(x_coord, y_coord));
-            else cout << "One value is missing, the last number won't be saved." << endl;
+        while(iss_file >> x_coord) {
+            if(iss_file >> y_coord) points.push_back(Point(x_coord, y_coord));
+            else {
+                cout << "error: one value is missing" << endl;
+                return;
+            }
         }
-        map_polygons.insert({name, ConvexPolygon(points)});
+        map_polygons[name] = ConvexPolygon(points);
     }
     if(file_name.empty()) cout << "error: a file name is expected." << endl;
     else cout << "ok" << endl;
@@ -175,6 +189,7 @@ void print(istringstream& iss) {
         cout << "error: undefined identifier." << endl;
         return;
     }
+    cout << name << " ";
     bool first = true;
     for(Point point : map_polygons[name].get_points()) {
         if(first) first = false;
@@ -202,7 +217,7 @@ void save(istringstream& iss) {
     string polygon;
     while(iss >> polygon) {
         if(inexistent(polygon)) {
-            cout << "warning: the polygon " << polygon << " doesn't exist and won't be saved." << endl;
+            cout << "error: the polygon " << polygon << " doesn't exist and won't be saved." << endl;
             return;
         }
         ofs << polygon;
@@ -234,7 +249,10 @@ void unio(istringstream& iss) {
     vector<string> polygons;
     bool first = true;
     while(iss >> polygon) {
-        if(not first and inexistent(polygon)) cout << "warning: the given polygon " << polygon << " doesn't exist." << endl;
+        if(not first and inexistent(polygon)) {
+            cout << "error: the given polygon " << polygon << " doesn't exist." << endl;
+            return;
+        }
         else polygons.push_back(polygon);
         first = false;
     }
@@ -242,13 +260,13 @@ void unio(istringstream& iss) {
         cout << "error: incorrect number of given polygons." << endl;
         return;
     }
-    else if(polygons.size() == 3) map_polygons.insert({polygons[0], map_polygons[polygons[1]] + map_polygons[polygons[2]]});
+    else if(polygons.size() == 3) map_polygons[polygons[0]] = map_polygons[polygons[1]] + map_polygons[polygons[2]];
     else {
         if(inexistent(polygons[0])) {
-            cout << "error: incorrect number of given polygons." << endl;
+            cout << "error: the given polygon " << polygons[0] << " doesn't exist." << endl;
             return;
         }
-        map_polygons[polygons[0]] = map_polygons[polygons[0]] * map_polygons[polygons[1]];
+        map_polygons[polygons[0]] = map_polygons[polygons[0]] + map_polygons[polygons[1]];
     }
     cout << "ok" << endl;
 }

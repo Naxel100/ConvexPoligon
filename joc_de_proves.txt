@@ -1,157 +1,33 @@
-polygon p1 0 0 0 1 1 1 1 0
+# Joc de proves
+
+polygon p1 0 0 1 1 1 0 0 1
 polygon p2 0.5 0.5 1 2 1 0.5
 intersection p3 p2 p1
 inside p3 p2
+inside p2 p3
 inside p3 p1
-setcol p3 1 0 0
-draw image.png p1 p2 p3
-
-#
-
-list
-
-#
-
-area
-
-bbox
-
-centroid
-
-draw
-
-edges
-
-inside
-
-intersection
-
-load
-
-perimeter
-
-polygon
-
-print
-
-regular
-
-save
-
-setcol
-
-union
-
-vertices
-
-#
-
-polygon p4
-polygon p5 -1 -1 -1 1 1 1 1 -1
-centroid p5
-intersection a b c d e f g
-union a b c d e f g
-intersection p1 p2 p3 p4
-vertices p6
-vertices p4
-polygon p6 0 0
-draw image2.png p4
-
-#
-
-hola
-adios
-hola hola adios adios
-
-#
-
-inside p4 p5
-inside p5 p4
-centroid p4
-
-#
-
-polygon q1  6 -4   8 2    14 2   14 6   8 8   2 4
-polygon q2  12 4   16 10  4 10   6 6
-# After the convex hull:
-print q1
-print q2
-union q3 q1 q2
-intersection q4 q1 q2
-setcol q2 0 1 0
-setcol q3 1 0 0
-setcol q4 0 0 1
-draw image3.png q1 q2 q3 q4
-polygon p1 0 0 0 1 1 1 1 0
-polygon p2 0.5 0.5 1 2 1 0.5
-intersection p3 p2 p1
-inside p3 p2
-inside p3 p1
-setcol p3 1 0 0
-draw image.png p1 p2 p3
-
-#
-
-list
-
-#
-
-area
-bbox
-centroid
-draw
-edges
-inside
-intersection
-load
-perimeter
-polygon
-print
-regular
-save
-setcol
-union
-vertices
-
-#
-
-polygon p4
-polygon p5 -1 -1 -1 1 1 1 1 -1
-centroid p5
-intersection a b c d e f g
-union a b c d e f g
-intersection p1 p2 p3 p4
-vertices p6
-vertices p4
-polygon p6 0 0
-draw image2.png p4
-draw imagee.png p5 p4
-
-#
-
-hola
-adios
-hola hola adios adios
-
-#
-
-inside p4 p5
-inside p5 p4
-centroid p4
-
-#
-
-polygon q1  6 -4   8 2    14 2   14 6   8 8   2 4
-polygon q2  12 4   16 10  4 10   6 6
-# After the convex hull:
-print q1
-print q2
-union q3 q1 q2
-intersection q4 q1 q2
-setcol q2 0 1 0
-setcol q3 1 0 0
-setcol q4 0 0 1
-draw image3.png q1 q2 q3 q4
-setcol q1 100 100 100
-polygon alex 0 0
-draw alex.png alex
+area p2
+vertices p2
+edges p1
+save file.txt p1 p2
+polygon p4 -1 1 1 -1
+union p2 p4
+intersection p5 p4 p1
+bbox p6 p1 p2 p3 p4 p5
+print p6
+color p1
+setcol p1 1 0 0
+color p1
+setcol p2 0 1 0
+setcol p3 0 0 1
+setcol p4 1 0.64 0
+setcol p5 100 100 100
+draw image.png p1 p2 p3 p4 p5 p6
+load file.txt
+draw image2.png p1 p2 p3 p4 p5
+polygon p1 -1 1 -1 -1 1 1 1 -1
+centroid p1
+polygon p2 0 3 5 5 9 2 9 5 2 0 4 2 9 2 8 4 2 0 4 0 34 4 3 39 2 3 2 5 9 2 12 3 5 3 2 1
+print p2
+polygon p10
+draw image3.png p2 p1
