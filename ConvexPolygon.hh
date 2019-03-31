@@ -1,9 +1,9 @@
 #ifndef ConvexPolygon_hh
 #define ConvexPolygon_hh
 
-#include <vector>
-#include <string>
 #include "Point.hh"
+#include <string>
+#include <vector>
 using namespace std;
 
 struct Color {
@@ -14,8 +14,8 @@ class ConvexPolygon {
 
 public:
 
-    //Constructor
-    ConvexPolygon(const vector<Point>& polygon = {}, const Color& color = {0, 0, 0});
+    // Constructor
+    ConvexPolygon(const vector<Point>& polygon = {}, const Color& entry_color = {0, 0, 0});
 
     ConvexPolygon bbox() const;
 

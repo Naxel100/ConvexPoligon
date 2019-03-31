@@ -1,15 +1,15 @@
-#include <iostream>
-#include <map>
-#include <vector>
-#include <sstream>
-#include <fstream>
-#include <pngwriter.h>
 #include "Point.hh"
 #include "ConvexPolygon.hh"
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <sstream>
+#include <vector>
 using namespace std;
 
 map<string, ConvexPolygon> map_polygons;
 
+//Return whether a polygon exist or not.
 bool inexistent(const string& name) {
     return map_polygons.find(name) == map_polygons.end();
 }
@@ -80,8 +80,12 @@ void draw(istringstream& iss) {
             great_polygon = great_polygon + map_polygons[polygon];
         }
     }
-    great_polygon = great_polygon.bbox();
-    great_polygon.draw(file_name, polygons);
+    if(file_name.empty()) cout << "error: a file name is expected." << endl;
+    else{
+        great_polygon = great_polygon.bbox();
+        great_polygon.draw(file_name, polygons);
+        cout << "ok" << endl;
+    }
 }
 
 void edges(istringstream& iss) {
@@ -107,20 +111,27 @@ void intersection(istringstream& iss) {
     while(iss >> polygon) {
         if(not first and inexistent(polygon)) cout << "warning: the given polygon " << polygon << " doesn't exist." << endl;
         else polygons.push_back(polygon);
+        first = false;
     }
     if(polygons.size() != 2 and polygons.size() != 3) {
         cout << "error: incorrect number of given polygons." << endl;
         return;
     }
     else if(polygons.size() == 3) map_polygons.insert({polygons[0], map_polygons[polygons[1]] * map_polygons[polygons[2]]});
-    else map_polygons[polygons[0]] = map_polygons[polygons[0]] * map_polygons[polygons[1]];
+    else {
+        if(inexistent(polygons[0])) {
+            cout << "error: incorrect number of given polygons." << endl;
+            return;
+        }
+        map_polygons[polygons[0]] = map_polygons[polygons[0]] * map_polygons[polygons[1]];
+    }
     cout << "ok" << endl;
 }
 
 void list() {
-    bool primer = true;
+    bool first = true;
     for(auto polygons : map_polygons) {
-        if(primer) primer = false;
+        if(first) first = false;
         else cout << " ";
         cout << polygons.first;
     }
@@ -164,9 +175,9 @@ void print(istringstream& iss) {
         cout << "error: undefined identifier." << endl;
         return;
     }
-    bool primer = true;
+    bool first = true;
     for(Point point : map_polygons[name].get_points()) {
-        if(primer) primer = false;
+        if(first) first = false;
         else cout << "   ";
         cout << point.get_x() << " " << point.get_y();
     }
@@ -211,24 +222,34 @@ void setcol(istringstream& iss) {
     if(inexistent(name)) cout << "error: undefined identifier." << endl;
     else {
         if(red < 0 or red > 1 or green < 0 or green > 1 or blue < 0 or blue > 1) cout << "error: all entries must be between 0 and 1, included." << endl;
-        else map_polygons[name].setcol(red, green, blue);
+        else {
+            map_polygons[name].setcol(red, green, blue);
+            cout << "ok" << endl;
+        }
     }
-    cout << "ok" << endl;
 }
 
 void unio(istringstream& iss) {
     string polygon;
     vector<string> polygons;
+    bool first = true;
     while(iss >> polygon) {
-        if(inexistent(polygon)) cout << "warning: the given polygon " << polygon << " doesn't exist." << endl;
+        if(not first and inexistent(polygon)) cout << "warning: the given polygon " << polygon << " doesn't exist." << endl;
         else polygons.push_back(polygon);
+        first = false;
     }
     if(polygons.size() != 2 and polygons.size() != 3) {
         cout << "error: incorrect number of given polygons." << endl;
         return;
     }
     else if(polygons.size() == 3) map_polygons.insert({polygons[0], map_polygons[polygons[1]] + map_polygons[polygons[2]]});
-    else map_polygons[polygons[0]] = map_polygons[polygons[0]] + map_polygons[polygons[1]];
+    else {
+        if(inexistent(polygons[0])) {
+            cout << "error: incorrect number of given polygons." << endl;
+            return;
+        }
+        map_polygons[polygons[0]] = map_polygons[polygons[0]] * map_polygons[polygons[1]];
+    }
     cout << "ok" << endl;
 }
 
@@ -239,6 +260,7 @@ void vertices(istringstream& iss) {
     else cout << map_polygons[name].vertices() << endl;
 }
 
+/************************* Main *************************/
 int main() {
     cout.setf(ios::fixed);
     cout.precision(3);
@@ -252,7 +274,7 @@ int main() {
         else if(action == "bbox") bbox(iss);
         else if(action == "centroid") centroid(iss);
         else if(action == "color") color(iss);
-        //else if(action == "draw") draw(iss);
+        else if(action == "draw") draw(iss);
         else if(action == "edges") edges(iss);
         else if(action == "inside") inside(iss);
         else if(action == "intersection") intersection(iss);
@@ -267,6 +289,7 @@ int main() {
         else if(action == "union") unio(iss);
         else if(action == "vertices") vertices(iss);
         else if(action == "#") cout << "#" << endl;
+        else if(action.empty()) cout << endl;
         else cout << "error: the command " << action << " can't be recognised." << endl;
     }
 }
